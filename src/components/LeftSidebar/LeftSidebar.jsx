@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./LeftSidebar.css";
 import assets from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +27,8 @@ const LeftSidebar = () => {
     setMessagesId,
     chatUser,
     setChatUser,
+    chatVisible,
+    setChatVisible,
   } = useContext(AppContext);
 
   const [user, setUser] = useState(null);
@@ -95,6 +97,22 @@ const LeftSidebar = () => {
           messageSeen: true,
         }),
       });
+
+
+      const uSnap = await getDoc(doc(db, "users", user.id));
+      const uData = uSnap.data();
+      setChat({
+        messagesId: newMessageRef.id,
+        lastMessage: '',
+        rId: user.id,
+        updatedAt: Date.now(),
+        messageSeen: true,
+        userData: uData
+      })
+
+      setShowSearch(false)
+      setChatVisible(true)
+
     } catch (error) {
       toast.error(error.message);
       console.error(error);
@@ -105,6 +123,7 @@ const LeftSidebar = () => {
     try {
       setMessagesId(item.messageId);
       setChatUser(item);
+      // console.log("chatUser: ", item);
 
       // below is for mark message as seen after chap opened
       const userChatsRef = doc(db, "chats", userData.id);
@@ -117,13 +136,31 @@ const LeftSidebar = () => {
       await updateDoc(userChatsRef, {
         chatsData: userChatsData.chatsData,
       });
+      setChatVisible(true);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
+  // useEffect(() => {
+  //   console.log(chatUser);
+  // }, [chatUser]);
+
+  useEffect(()=>{
+    const updateChatUserData= async ()=>{
+      if(chatUser){
+        const userRef= doc(db,'users',chatUser.userData.id)
+        const userSnap= await getDoc(userRef)
+        const userData= userSnap.data();
+        setChatUser(prev=>({...prev, userData: userData}))
+
+      }
+    }
+    updateChatUserData()
+  },[chatData])
+
   return (
-    <div className="ls">
+    <div className={`ls ${chatVisible ? "hidden" : ""}`}>
       <div className="ls-top">
         <div className="ls-nav">
           <img src={assets.logo} alt="" className="logo" />

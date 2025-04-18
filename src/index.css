@@ -6,10 +6,16 @@
   font-family: Poopins;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   display: none;
 }
 
-img.dot{
+img.dot {
   width: 15px !important;
+}
+
+@media (max-width: 900px) {
+  .hidden {
+    display: none;
+  }
 }

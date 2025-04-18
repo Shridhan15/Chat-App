@@ -12,6 +12,8 @@ const AppContextProvider = (props) => {
   const [messagesId,setMessagesId]=useState(null)
   const [messages,setMessages]=useState([])
   const [chatUser,setChatUser]=useState(null)
+  const [chatVisible,setChatVisible]=useState(false)
+
   //get user data from users collection after locating user by uid
   const loadUserData = async (uid) => {
     try {
@@ -29,6 +31,7 @@ const AppContextProvider = (props) => {
       });
       setInterval(async () => {
         //update last seen every one minute
+
         if (auth.chatUser) {
           await updateDoc(userRef, {
             lastSeen: Date.now(),
@@ -72,6 +75,7 @@ const AppContextProvider = (props) => {
     messages,setMessages,
     messagesId,setMessagesId,
     chatUser,setChatUser,
+    chatVisible,setChatVisible
   };
 
   return (

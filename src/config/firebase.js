@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { getFirestore, setDoc, doc } from "firebase/firestore"; // <- added doc here
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getFirestore, setDoc, doc, collection, query, where, getDoc, getDocs } from "firebase/firestore"; // <- added doc here
 import { toast } from "react-toastify";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -69,4 +69,25 @@ const logout = async () => {
   }
 }
 
-export { signup, login, logout, auth, db }
+const resetPass = async (email) => {
+  if (!email) {
+    toast.error("Enter your email")
+    return null;
+  }
+  try {
+    const userRef = collection(db, 'user');
+    const q = query(userRef, where("email", '==', email))
+    const querySnap = await getDocs(q)
+    if (!querySnap.empty) {
+      await sendPasswordResetEmail(auth, email)
+      toast.success("Reset email sent")
+    } else {
+      toast.error("Email does not exist")
+    }
+  } catch (error) {
+    console.error(error)
+    toast.error(error.message)
+  }
+}
+
+export { signup, login, logout, auth, db, resetPass }

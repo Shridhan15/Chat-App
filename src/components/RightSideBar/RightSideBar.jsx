@@ -1,31 +1,63 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./RightSideBar.css";
 import assets from "../../assets/assets";
 import { logout } from "../../config/firebase";
+import { AppContext } from "../../context/AppContext";
 
 const RightSideBar = () => {
-  return (
+  const { chatUser, messages } = useContext(AppContext);
+  const [msgImages, setMsgImages] = useState([]);
+
+  //whenever chatUser is changed messages array also changed so we extract images from messages array
+  useEffect(() => {
+    let tempVar = [];
+    messages.map((msg) => {
+      if (msg.image) {
+        tempVar.push(msg.image);
+      }
+    });
+    // console.log(tempVar)
+    setMsgImages(tempVar);
+  }, [messages]);
+
+  return chatUser ? (
     <div className="rs">
       <div className="rs-profile">
-        <img src={assets.profile_img} alt="" />
+        <img src={chatUser.userData.avatar} alt="" />
         <h3>
-          Richard Sanford <img src={assets.green_dot} className="dot" alt="" />
+          {Date.now() - chatUser.userData.lastSeen <= 70000 ? (
+            <img src={assets.green_dot} className="dot" alt="" />
+          ) : null}
+          {chatUser.userData.name}
         </h3>
-        <p>Hey There i am Richard Sanford using chat app</p>
+        <p>{chatUser.userData.bio}</p>
       </div>
       <hr />
       <div className="rs-media">
         <p>Media</p>
         <div>
-          <img src={assets.pic1} alt="" />
+          {msgImages.map((url, index) => (
+            <img
+              onClick={() => window.open(url)}
+              key={index}
+              src={url}
+              alt=""
+            />
+          ))}
+
+          {/* <img src={assets.pic1} alt="" />
           <img src={assets.pic2} alt="" />
           <img src={assets.pic3} alt="" />
           <img src={assets.pic4} alt="" />
           <img src={assets.pic1} alt="" />
-          <img src={assets.pic2} alt="" />
+          <img src={assets.pic2} alt="" /> */}
         </div>
       </div>
 
+      <button onClick={() => logout()}>Logout</button>
+    </div>
+  ) : (
+    <div className="rs">
       <button onClick={() => logout()}>Logout</button>
     </div>
   );
