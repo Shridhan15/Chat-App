@@ -40,7 +40,7 @@ const signup = async (username, email, password) => {
     })
 
     await setDoc(doc(db, "chats", user.uid), {
-      chatData: []
+      chatsData: []
     })
   } catch (error) {
     console.error(error)
@@ -69,4 +69,4 @@ const logout = async () => {
   }
 }
 
-export { signup, login,logout,auth,db }
+export { signup, login, logout, auth, db }

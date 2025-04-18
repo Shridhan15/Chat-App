@@ -9,17 +9,14 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onSubmitHandler=(event)=>{
-    event.preventDefault()
-    if(currState==='Sign up'){
-      signup(userName,email,password)
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+    if (currState === "Sign up") {
+      signup(userName, email, password);
+    } else {
+      login(email, password);
     }
-    else{
-      login(email,password)
-    }
-
-
-  }
+  };
 
   return (
     <div className="login">
