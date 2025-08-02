@@ -13,6 +13,7 @@ import {
   setDoc,
   updateDoc,
   where,
+
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import { AppContext } from "../../context/AppContext";
@@ -36,7 +37,7 @@ const LeftSidebar = () => {
 
   const inputHandler = async (e) => {
     try {
-      // get the input from search box and all user from users collection and run a query to match username in collection with input value
+      // get the from search box and all user from users collection and run a query to match username in collection with input value
 
       const input = e.target.value;
       if (input) {
