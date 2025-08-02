@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import "./LeftSidebar.css";
+import "./LeftSideBar.css";
 import assets from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,7 +13,6 @@ import {
   setDoc,
   updateDoc,
   where,
-
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import { AppContext } from "../../context/AppContext";
@@ -37,7 +36,7 @@ const LeftSidebar = () => {
 
   const inputHandler = async (e) => {
     try {
-      // get the from search box and all user from users collection and run a query to match username in collection with input value
+      // get the input from search box and all user from users collection and run a query to match username in collection with input value
 
       const input = e.target.value;
       if (input) {
